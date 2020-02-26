@@ -11,7 +11,10 @@
         }
     ],
     "require": {
-        "php": "^7.2.0"
+        "php": "^7.2.0",
+        "extendsframework/extends-authorization": "^0.1.0",
+        "extendsframework/extends-router": "^0.1.0",
+        "ext-json": "*"
     },
     "require-dev": {
         "extendsframework/extends-coding-standard": "^0.1.0",
