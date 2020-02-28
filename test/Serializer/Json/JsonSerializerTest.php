@@ -130,4 +130,52 @@ class JsonSerializerTest extends TestCase
             $serializer->serialize($resource)
         );
     }
+
+    /**
+     * Test that empty _links and _embedded array will not be rendered where empty attributes must be rendered.
+     *
+     * @covers \ExtendsFramework\Hateoas\Serializer\Json\JsonSerializer::__construct()
+     * @covers \ExtendsFramework\Hateoas\Serializer\Json\JsonSerializer::serialize()
+     * @covers \ExtendsFramework\Hateoas\Serializer\Json\JsonSerializer::toArray()
+     * @covers \ExtendsFramework\Hateoas\Serializer\Json\JsonSerializer::serializeLinks()
+     * @covers \ExtendsFramework\Hateoas\Serializer\Json\JsonSerializer::serializeAttributes()
+     * @covers \ExtendsFramework\Hateoas\Serializer\Json\JsonSerializer::serializeResources()
+     */
+    public function testEmptyProperties(): void
+    {
+        $router = $this->createMock(RouterInterface::class);
+
+        $attribute = $this->createMock(AttributeInterface::class);
+        $attribute
+            ->expects($this->any())
+            ->method('getValue')
+            ->willReturnOnConsecutiveCalls(1, 'Title', null, '');
+
+        $resource = $this->createMock(ResourceInterface::class);
+        $resource
+            ->expects($this->any())
+            ->method('getAttributes')
+            ->willReturn([
+                'id' => $attribute,
+                'title' => $attribute,
+                'description' => $attribute,
+                'comment' => $attribute,
+            ]);
+
+        /**
+         * @var RouterInterface $router
+         * @var ResourceInterface $resource
+         * @var IdentityInterface $identity
+         */
+        $serializer = new JsonSerializer($router);
+        $this->assertSame(
+            json_encode([
+                'id' => 1,
+                'title' => 'Title',
+                'description' => null,
+                'comment' => '',
+            ]),
+            $serializer->serialize($resource)
+        );
+    }
 }

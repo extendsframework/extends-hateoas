@@ -50,14 +50,14 @@ class JsonSerializer implements SerializerInterface
      */
     private function toArray(ResourceInterface $resource): array
     {
-        return array_filter(
-            array_merge(
+        return array_merge(
+            array_filter(
                 [
                     '_links' => $this->serializeLinks($resource->getLinks()),
                     '_embedded' => $this->serializeResources($resource->getResources())
-                ],
-                $this->serializeAttributes($resource->getAttributes())
-            )
+                ]
+            ),
+            $this->serializeAttributes($resource->getAttributes())
         );
     }
 
