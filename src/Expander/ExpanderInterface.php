@@ -13,8 +13,8 @@ interface ExpanderInterface
      *
      * @param LinkInterface $link
      *
-     * @return BuilderInterface|null
+     * @return BuilderInterface
      * @throws ExpanderException
      */
-    public function expand(LinkInterface $link): ?BuilderInterface;
+    public function expand(LinkInterface $link): BuilderInterface;
 }
