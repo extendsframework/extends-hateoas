@@ -15,11 +15,11 @@ class CollectionBuilder extends Builder
      *
      * @param RouterInterface $router
      * @param string $route
+     * @param string $rel
+     * @param array $resources
      * @param int $limit
      * @param int $page
      * @param int $total
-     * @param array $resources
-     * @param string $rel
      * @param array|null $keys
      *
      * @throws RouterException
@@ -27,11 +27,11 @@ class CollectionBuilder extends Builder
     public function __construct(
         RouterInterface $router,
         string $route,
+        string $rel,
+        array $resources,
         int $limit,
         int $page,
         int $total,
-        array $resources,
-        string $rel,
         array $keys = null
     ) {
         $keys['limit'] = $keys['limit'] ?? 'limit';

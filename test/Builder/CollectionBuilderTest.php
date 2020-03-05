@@ -59,14 +59,14 @@ class CollectionBuilderTest extends TestCase
         $collection = new CollectionBuilder(
             $router,
             'route-name',
-            20,
-            2,
-            120,
+            'rel',
             [
                 $resource,
                 $resource
             ],
-            'rel'
+            20,
+            2,
+            120
         );
         $built = $collection->build();
 
