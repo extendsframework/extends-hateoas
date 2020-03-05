@@ -285,8 +285,6 @@ class Builder implements BuilderInterface
     {
         $build = [];
         foreach ($resources as $rel => $resource) {
-            $rel = $outerRel ?: $rel;
-
             if (is_array($resource)) {
                 $build[$rel] = $this->getBuiltResources($resource, $rel);
             } else {
@@ -294,8 +292,8 @@ class Builder implements BuilderInterface
                     ->setIdentity($this->identity)
                     ->setAuthorizer($this->authorizer)
                     ->setExpander($this->expander)
-                    ->setToExpand($this->toExpand[$rel] ?? [])
-                    ->setToProject($this->toProject[$rel] ?? [])
+                    ->setToExpand($this->toExpand[$outerRel ?: $rel] ?? [])
+                    ->setToProject($this->toProject[$outerRel ?: $rel] ?? [])
                     ->build();
             }
         }

@@ -124,6 +124,8 @@ class BuilderTest extends TestCase
         $resources = $resource->getResources();
         $this->assertInstanceOf(ResourceInterface::class, $resources['single']);
         $this->assertInstanceOf(ResourceInterface::class, $resources['author']);
+
+        $this->assertCount(2, $resources['multiple']);
         $this->assertContainsOnlyInstancesOf(ResourceInterface::class, $resources['multiple']);
     }
 
