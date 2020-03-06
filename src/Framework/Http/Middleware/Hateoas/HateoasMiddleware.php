@@ -108,7 +108,7 @@ class HateoasMiddleware implements MiddlewareInterface
             }
 
             $response = $response
-                ->withHeader('Content-Type', 'application/Hateoas+json')
+                ->withHeader('Content-Type', 'application/hal+json')
                 ->withBody(
                     $this
                         ->serializer
