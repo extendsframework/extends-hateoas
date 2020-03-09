@@ -31,6 +31,7 @@ class CollectionBuilderTest extends TestCase
                 [
                     'route-name',
                     [
+                        'foo' => 'bar',
                         'limit' => 20,
                         'page' => 2,
                     ]
@@ -38,6 +39,7 @@ class CollectionBuilderTest extends TestCase
                 [
                     'route-name',
                     [
+                        'foo' => 'bar',
                         'limit' => 20,
                         'page' => 1,
                     ]
@@ -45,6 +47,7 @@ class CollectionBuilderTest extends TestCase
                 [
                     'route-name',
                     [
+                        'foo' => 'bar',
                         'limit' => 20,
                         'page' => 3,
                     ]
@@ -59,6 +62,9 @@ class CollectionBuilderTest extends TestCase
         $collection = new CollectionBuilder(
             $router,
             'route-name',
+            [
+                'foo' => 'bar',
+            ],
             'rel',
             [
                 $resource,

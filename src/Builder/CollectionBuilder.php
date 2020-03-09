@@ -15,6 +15,7 @@ class CollectionBuilder extends Builder
      *
      * @param RouterInterface $router
      * @param string $route
+     * @param array $parameters
      * @param string $rel
      * @param array $resources
      * @param int $limit
@@ -27,6 +28,7 @@ class CollectionBuilder extends Builder
     public function __construct(
         RouterInterface $router,
         string $route,
+        array $parameters,
         string $rel,
         array $resources,
         int $limit,
@@ -42,10 +44,16 @@ class CollectionBuilder extends Builder
             ->addLink(
                 'self',
                 new Link(
-                    $router->assemble($route, [
-                        $keys['limit'] => $limit,
-                        $keys['page'] => $page,
-                    ])
+                    $router->assemble(
+                        $route,
+                        array_merge(
+                            $parameters,
+                            [
+                                $keys['limit'] => $limit,
+                                $keys['page'] => $page,
+                            ]
+                        )
+                    )
                 )
             )
             ->addAttribute($keys['limit'], new Attribute($limit))
@@ -56,10 +64,16 @@ class CollectionBuilder extends Builder
             $this->addLink(
                 'prev',
                 new Link(
-                    $router->assemble($route, [
-                        $keys['limit'] => $limit,
-                        $keys['page'] => $page - 1,
-                    ])
+                    $router->assemble(
+                        $route,
+                        array_merge(
+                            $parameters,
+                            [
+                                $keys['limit'] => $limit,
+                                $keys['page'] => $page - 1,
+                            ]
+                        )
+                    )
                 )
             );
         }
@@ -68,10 +82,16 @@ class CollectionBuilder extends Builder
             $this->addLink(
                 'next',
                 new Link(
-                    $router->assemble($route, [
-                        $keys['limit'] => $limit,
-                        $keys['page'] => $page + 1,
-                    ])
+                    $router->assemble(
+                        $route,
+                        array_merge(
+                            $parameters,
+                            [
+                                $keys['limit'] => $limit,
+                                $keys['page'] => $page + 1,
+                            ]
+                        )
+                    )
                 )
             );
         }
