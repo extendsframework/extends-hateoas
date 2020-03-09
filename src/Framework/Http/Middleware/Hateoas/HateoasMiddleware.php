@@ -107,13 +107,13 @@ class HateoasMiddleware implements MiddlewareInterface
                     ]);
             }
 
+            $serialized = $this
+                ->serializer
+                ->serialize($resource);
             $response = $response
                 ->withHeader('Content-Type', 'application/hal+json')
-                ->withBody(
-                    $this
-                        ->serializer
-                        ->serialize($resource)
-                );
+                ->withHeader('Content-Length', (string)strlen($serialized))
+                ->withBody($serialized);
         }
 
         return $response;

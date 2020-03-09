@@ -130,9 +130,12 @@ class HateoasMiddlewareTest extends TestCase
             ->willReturn($builder);
 
         $response
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('withHeader')
-            ->with('Content-Type', 'application/hal+json')
+            ->withConsecutive(
+                ['Content-Type', 'application/hal+json'],
+                ['Content-Length', '8']
+            )
             ->willReturnSelf();
 
         $response
