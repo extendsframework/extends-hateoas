@@ -132,7 +132,7 @@ class HateoasMiddlewareTest extends TestCase
         $response
             ->expects($this->once())
             ->method('withHeader')
-            ->with('Content-Type', 'application/Hateoas+json')
+            ->with('Content-Type', 'application/hal+json')
             ->willReturnSelf();
 
         $response
