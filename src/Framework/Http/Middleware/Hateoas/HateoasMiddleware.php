@@ -9,6 +9,9 @@ use ExtendsFramework\Hateoas\Builder\Exception\AttributeNotFound;
 use ExtendsFramework\Hateoas\Builder\Exception\LinkNotEmbeddable;
 use ExtendsFramework\Hateoas\Builder\Exception\LinkNotFound;
 use ExtendsFramework\Hateoas\Expander\ExpanderInterface;
+use ExtendsFramework\Hateoas\Framework\Http\Middleware\Hateoas\ProblemDetails\AttributeNotFoundProblemDetails;
+use ExtendsFramework\Hateoas\Framework\Http\Middleware\Hateoas\ProblemDetails\LinkNotEmbeddableProblemDetails;
+use ExtendsFramework\Hateoas\Framework\Http\Middleware\Hateoas\ProblemDetails\LinkNotFoundProblemDetails;
 use ExtendsFramework\Hateoas\Serializer\SerializerInterface;
 use ExtendsFramework\Http\Middleware\Chain\MiddlewareChainInterface;
 use ExtendsFramework\Http\Middleware\MiddlewareInterface;
@@ -61,6 +64,8 @@ class HateoasMiddleware implements MiddlewareInterface
      */
     public function process(RequestInterface $request, MiddlewareChainInterface $chain): ResponseInterface
     {
+        $clonedRequest = clone $request;
+
         $uri = $request->getUri();
         $query = $uri->getQuery();
 
@@ -74,46 +79,35 @@ class HateoasMiddleware implements MiddlewareInterface
         $builder = $response->getBody();
         if ($builder instanceof BuilderInterface) {
             try {
-                $resource = $builder
-                    ->setExpander($this->expander)
-                    ->setAuthorizer($this->authorizer)
-                    ->setIdentity($request->getAttribute('identity'))
-                    ->setToExpand($expand)
-                    ->setToProject($project)
-                    ->build();
-            } catch (LinkNotFound $exception) {
-                return (new Response())
-                    ->withStatusCode(400)
-                    ->withBody([
-                        'type' => '',
-                        'title' => 'Link rel not found.',
-                        'rel' => $exception->getRel(),
-                    ]);
-            } catch (LinkNotEmbeddable $exception) {
-                return (new Response())
-                    ->withStatusCode(400)
-                    ->withBody([
-                        'type' => '',
-                        'title' => 'Link rel not embeddable.',
-                        'rel' => $exception->getRel(),
-                    ]);
-            } catch (AttributeNotFound $exception) {
-                return (new Response())
-                    ->withStatusCode(400)
-                    ->withBody([
-                        'type' => '',
-                        'title' => 'Attribute property not found.',
-                        'property' => $exception->getProperty(),
-                    ]);
-            }
+                $serialized = $this
+                    ->serializer
+                    ->serialize(
+                        $builder
+                            ->setExpander($this->expander)
+                            ->setAuthorizer($this->authorizer)
+                            ->setIdentity($request->getAttribute('identity'))
+                            ->setToExpand($expand)
+                            ->setToProject($project)
+                            ->build()
+                    );
 
-            $serialized = $this
-                ->serializer
-                ->serialize($resource);
-            $response = $response
-                ->withHeader('Content-Type', 'application/hal+json')
-                ->withHeader('Content-Length', (string)strlen($serialized))
-                ->withBody($serialized);
+                $response = $response
+                    ->withHeader('Content-Type', 'application/hal+json')
+                    ->withHeader('Content-Length', (string)strlen($serialized))
+                    ->withBody($serialized);
+            } catch (LinkNotFound $exception) {
+                return (new Response())->withBody(
+                    new LinkNotFoundProblemDetails($clonedRequest, $exception->getRel())
+                );
+            } catch (LinkNotEmbeddable $exception) {
+                return (new Response())->withBody(
+                    new LinkNotEmbeddableProblemDetails($clonedRequest, $exception->getRel())
+                );
+            } catch (AttributeNotFound $exception) {
+                return (new Response())->withBody(
+                    new AttributeNotFoundProblemDetails($clonedRequest, $exception->getProperty())
+                );
+            }
         }
 
         return $response;

@@ -9,6 +9,9 @@ use ExtendsFramework\Hateoas\Builder\Exception\AttributeNotFound;
 use ExtendsFramework\Hateoas\Builder\Exception\LinkNotEmbeddable;
 use ExtendsFramework\Hateoas\Builder\Exception\LinkNotFound;
 use ExtendsFramework\Hateoas\Expander\ExpanderInterface;
+use ExtendsFramework\Hateoas\Framework\Http\Middleware\Hateoas\ProblemDetails\AttributeNotFoundProblemDetails;
+use ExtendsFramework\Hateoas\Framework\Http\Middleware\Hateoas\ProblemDetails\LinkNotEmbeddableProblemDetails;
+use ExtendsFramework\Hateoas\Framework\Http\Middleware\Hateoas\ProblemDetails\LinkNotFoundProblemDetails;
 use ExtendsFramework\Hateoas\ResourceInterface;
 use ExtendsFramework\Hateoas\Serializer\SerializerInterface;
 use ExtendsFramework\Http\Middleware\Chain\MiddlewareChainInterface;
@@ -204,7 +207,7 @@ class HateoasMiddlewareTest extends TestCase
             ->willReturn($identity);
 
         $request
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('getUri')
             ->willReturn($uri);
 
@@ -283,14 +286,7 @@ class HateoasMiddlewareTest extends TestCase
         $middleware = new HateoasMiddleware($authorizer, $expander, $serializer);
 
         $response = $middleware->process($request, $chain);
-
-        $this->assertIsObject($response);
-        $this->assertSame(400, $response->getStatusCode());
-        $this->assertSame([
-            'type' => '',
-            'title' => 'Link rel not found.',
-            'rel' => 'author',
-        ], $response->getBody());
+        $this->assertInstanceOf(LinkNotFoundProblemDetails::class, $response->getBody());
     }
 
     /**
@@ -333,7 +329,7 @@ class HateoasMiddlewareTest extends TestCase
             ->willReturn($identity);
 
         $request
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('getUri')
             ->willReturn($uri);
 
@@ -412,14 +408,7 @@ class HateoasMiddlewareTest extends TestCase
         $middleware = new HateoasMiddleware($authorizer, $expander, $serializer);
 
         $response = $middleware->process($request, $chain);
-
-        $this->assertIsObject($response);
-        $this->assertSame(400, $response->getStatusCode());
-        $this->assertSame([
-            'type' => '',
-            'title' => 'Link rel not embeddable.',
-            'rel' => 'comments',
-        ], $response->getBody());
+        $this->assertInstanceOf(LinkNotEmbeddableProblemDetails::class, $response->getBody());
     }
 
     /**
@@ -462,7 +451,7 @@ class HateoasMiddlewareTest extends TestCase
             ->willReturn($identity);
 
         $request
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('getUri')
             ->willReturn($uri);
 
@@ -541,13 +530,6 @@ class HateoasMiddlewareTest extends TestCase
         $middleware = new HateoasMiddleware($authorizer, $expander, $serializer);
 
         $response = $middleware->process($request, $chain);
-
-        $this->assertIsObject($response);
-        $this->assertSame(400, $response->getStatusCode());
-        $this->assertSame([
-            'type' => '',
-            'title' => 'Attribute property not found.',
-            'property' => 'name',
-        ], $response->getBody());
+        $this->assertInstanceOf(AttributeNotFoundProblemDetails::class, $response->getBody());
     }
 }
