@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace ExtendsFramework\Hateoas\Framework\Http\Middleware\Hateoas\ProblemDetails;
+namespace ExtendsFramework\Hateoas\Framework\ProblemDetails;
 
 use ExtendsFramework\Http\Request\RequestInterface;
 use ExtendsFramework\ProblemDetails\ProblemDetails;
 
-class LinkNotFoundProblemDetails extends ProblemDetails
+class LinkNotEmbeddableProblemDetails extends ProblemDetails
 {
     /**
      * LinkNotfoundProblemDetails constructor.
@@ -17,13 +17,13 @@ class LinkNotFoundProblemDetails extends ProblemDetails
     public function __construct(RequestInterface $request, string $rel)
     {
         parent::__construct(
-            '/problems/hateoas/link-not-found',
-            'Link not found',
+            '/problems/hateoas/link-not-embeddable',
+            'Link not embeddable',
             sprintf(
-                'Link with rel "%s" can not be found.',
+                'Link with rel "%s" is not embeddable.',
                 $rel
             ),
-            404,
+            400,
             $request->getUri()->toRelative(),
             [
                 'rel' => $rel,

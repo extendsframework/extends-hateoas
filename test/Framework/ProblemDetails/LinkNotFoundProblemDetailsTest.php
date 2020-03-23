@@ -1,18 +1,18 @@
 <?php
 declare(strict_types=1);
 
-namespace ExtendsFramework\Hateoas\Framework\Http\Middleware\Hateoas\ProblemDetails;
+namespace ExtendsFramework\Hateoas\Framework\ProblemDetails;
 
 use ExtendsFramework\Http\Request\RequestInterface;
 use ExtendsFramework\Http\Request\Uri\UriInterface;
 use PHPUnit\Framework\TestCase;
 
-class AttributeNotFoundProblemDetailsTest extends TestCase
+class LinkNotFoundProblemDetailsTest extends TestCase
 {
     /**
      * Test that getters will return correct values.
      *
-     * @covers \ExtendsFramework\Hateoas\Framework\Http\Middleware\Hateoas\ProblemDetails\AttributeNotFoundProblemDetails::__construct()
+     * @covers \ExtendsFramework\Hateoas\Framework\ProblemDetails\LinkNotFoundProblemDetails::__construct()
      */
     public function testGetters(): void
     {
@@ -31,13 +31,13 @@ class AttributeNotFoundProblemDetailsTest extends TestCase
         /**
          * @var RequestInterface $request
          */
-        $problemDetails = new AttributeNotFoundProblemDetails($request, 'author');
+        $problemDetails = new LinkNotFoundProblemDetails($request, 'author');
 
-        $this->assertSame('/problems/hateoas/attribute-not-found', $problemDetails->getType());
-        $this->assertSame('Attribute not found', $problemDetails->getTitle());
-        $this->assertSame('Attribute with property "author" can not be found.', $problemDetails->getDetail());
+        $this->assertSame('/problems/hateoas/link-not-found', $problemDetails->getType());
+        $this->assertSame('Link not found', $problemDetails->getTitle());
+        $this->assertSame('Link with rel "author" can not be found.', $problemDetails->getDetail());
         $this->assertSame(404, $problemDetails->getStatus());
         $this->assertSame('/foo/bar', $problemDetails->getInstance());
-        $this->assertSame(['property' => 'author'], $problemDetails->getAdditional());
+        $this->assertSame(['rel' => 'author'], $problemDetails->getAdditional());
     }
 }

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace ExtendsFramework\Hateoas\Framework\Http\Middleware\Hateoas\ProblemDetails;
+namespace ExtendsFramework\Hateoas\Framework\ProblemDetails;
 
 use ExtendsFramework\Http\Request\RequestInterface;
 use ExtendsFramework\Http\Request\Uri\UriInterface;
@@ -13,7 +13,7 @@ class LinkNotEmbeddableProblemDetailsTest extends TestCase
     /**
      * Test that getters will return correct values.
      *
-     * @covers \ExtendsFramework\Hateoas\Framework\Http\Middleware\Hateoas\ProblemDetails\LinkNotEmbeddableProblemDetails::__construct()
+     * @covers \ExtendsFramework\Hateoas\Framework\ProblemDetails\LinkNotEmbeddableProblemDetails::__construct()
      */
     public function testGetters(): void
     {

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace ExtendsFramework\Hateoas\Framework\Http\Middleware\Hateoas\ProblemDetails;
+namespace ExtendsFramework\Hateoas\Framework\ProblemDetails;
 
 use ExtendsFramework\Http\Request\RequestInterface;
 use ExtendsFramework\ProblemDetails\ProblemDetails;
