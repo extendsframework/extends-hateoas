@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace ExtendsFramework\Hateoas\Framework\ProblemDetails;
 
+use ExtendsFramework\Hateoas\Builder\Exception\AttributeNotFound;
 use ExtendsFramework\Http\Request\RequestInterface;
 use ExtendsFramework\Http\Request\Uri\UriInterface;
 use PHPUnit\Framework\TestCase;
@@ -28,10 +29,17 @@ class AttributeNotFoundProblemDetailsTest extends TestCase
             ->method('getUri')
             ->willReturn($uri);
 
+        $exception = $this->createMock(AttributeNotFound::class);
+        $exception
+            ->expects($this->exactly(2))
+            ->method('getProperty')
+            ->willReturn('author');
+
         /**
          * @var RequestInterface $request
+         * @var AttributeNotFound $exception
          */
-        $problemDetails = new AttributeNotFoundProblemDetails($request, 'author');
+        $problemDetails = new AttributeNotFoundProblemDetails($request, $exception);
 
         $this->assertSame('/problems/hateoas/attribute-not-found', $problemDetails->getType());
         $this->assertSame('Attribute not found', $problemDetails->getTitle());

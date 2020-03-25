@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace ExtendsFramework\Hateoas\Framework\ProblemDetails;
 
+use ExtendsFramework\Hateoas\Builder\Exception\LinkNotEmbeddable;
 use ExtendsFramework\Http\Request\RequestInterface;
 use ExtendsFramework\Http\Request\Uri\UriInterface;
 use ExtendsFramework\ProblemDetails\ProblemDetailsInterface;
@@ -29,10 +30,17 @@ class LinkNotEmbeddableProblemDetailsTest extends TestCase
             ->method('getUri')
             ->willReturn($uri);
 
+        $exception = $this->createMock(LinkNotEmbeddable::class);
+        $exception
+            ->expects($this->exactly(2))
+            ->method('getRel')
+            ->willReturn('comments');
+
         /**
          * @var RequestInterface $request
+         * @var LinkNotEmbeddable $exception
          */
-        $problemDetails = new LinkNotEmbeddableProblemDetails($request, 'comments');
+        $problemDetails = new LinkNotEmbeddableProblemDetails($request, $exception);
 
         $this->assertInstanceOf(ProblemDetailsInterface::class, $problemDetails);
         $this->assertSame('/problems/hateoas/link-not-embeddable', $problemDetails->getType());

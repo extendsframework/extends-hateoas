@@ -97,15 +97,15 @@ class HateoasMiddleware implements MiddlewareInterface
                     ->withBody($serialized);
             } catch (LinkNotFound $exception) {
                 return (new Response())->withBody(
-                    new LinkNotFoundProblemDetails($clonedRequest, $exception->getRel())
+                    new LinkNotFoundProblemDetails($clonedRequest, $exception)
                 );
             } catch (LinkNotEmbeddable $exception) {
                 return (new Response())->withBody(
-                    new LinkNotEmbeddableProblemDetails($clonedRequest, $exception->getRel())
+                    new LinkNotEmbeddableProblemDetails($clonedRequest, $exception)
                 );
             } catch (AttributeNotFound $exception) {
                 return (new Response())->withBody(
-                    new AttributeNotFoundProblemDetails($clonedRequest, $exception->getProperty())
+                    new AttributeNotFoundProblemDetails($clonedRequest, $exception)
                 );
             }
         }

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace ExtendsFramework\Hateoas\Framework\ProblemDetails;
 
+use ExtendsFramework\Hateoas\Builder\Exception\LinkNotFound;
 use ExtendsFramework\Http\Request\RequestInterface;
 use ExtendsFramework\Http\Request\Uri\UriInterface;
 use PHPUnit\Framework\TestCase;
@@ -28,10 +29,17 @@ class LinkNotFoundProblemDetailsTest extends TestCase
             ->method('getUri')
             ->willReturn($uri);
 
+        $exception = $this->createMock(LinkNotFound::class);
+        $exception
+            ->expects($this->exactly(2))
+            ->method('getRel')
+            ->willReturn('author');
+
         /**
          * @var RequestInterface $request
+         * @var LinkNotFound $exception
          */
-        $problemDetails = new LinkNotFoundProblemDetails($request, 'author');
+        $problemDetails = new LinkNotFoundProblemDetails($request, $exception);
 
         $this->assertSame('/problems/hateoas/link-not-found', $problemDetails->getType());
         $this->assertSame('Link not found', $problemDetails->getTitle());
