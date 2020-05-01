@@ -18,6 +18,7 @@ use ExtendsFramework\Http\Middleware\MiddlewareInterface;
 use ExtendsFramework\Http\Request\RequestInterface;
 use ExtendsFramework\Http\Response\Response;
 use ExtendsFramework\Http\Response\ResponseInterface;
+use ExtendsFramework\Identity\Storage\StorageInterface;
 
 class HateoasMiddleware implements MiddlewareInterface
 {
@@ -43,20 +44,30 @@ class HateoasMiddleware implements MiddlewareInterface
     private $serializer;
 
     /**
+     * Identity storage.
+     *
+     * @var StorageInterface
+     */
+    private $storage;
+
+    /**
      * HateoasMiddleware constructor.
      *
      * @param AuthorizerInterface $authorizer
      * @param ExpanderInterface $expander
      * @param SerializerInterface $serializer
+     * @param StorageInterface $storage
      */
     public function __construct(
         AuthorizerInterface $authorizer,
         ExpanderInterface $expander,
-        SerializerInterface $serializer
+        SerializerInterface $serializer,
+        StorageInterface $storage
     ) {
         $this->authorizer = $authorizer;
         $this->expander = $expander;
         $this->serializer = $serializer;
+        $this->storage = $storage;
     }
 
     /**
@@ -85,7 +96,7 @@ class HateoasMiddleware implements MiddlewareInterface
                         $builder
                             ->setExpander($this->expander)
                             ->setAuthorizer($this->authorizer)
-                            ->setIdentity($request->getAttribute('identity'))
+                            ->setIdentity($this->storage->getIdentity())
                             ->setToExpand($expand)
                             ->setToProject($project)
                             ->build()
