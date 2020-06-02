@@ -19,7 +19,7 @@ use ExtendsFramework\Http\Request\RequestInterface;
 use ExtendsFramework\Http\Request\Uri\UriInterface;
 use ExtendsFramework\Http\Response\ResponseInterface;
 use ExtendsFramework\Identity\IdentityInterface;
-use ExtendsFramework\Identity\Storage\StorageInterface;
+use ExtendsFramework\Security\SecurityServiceInterface;
 use PHPUnit\Framework\TestCase;
 
 class HateoasMiddlewareTest extends TestCase
@@ -58,8 +58,8 @@ class HateoasMiddlewareTest extends TestCase
 
         $identity = $this->createMock(IdentityInterface::class);
 
-        $storage = $this->createMock(StorageInterface::class);
-        $storage
+        $securityService = $this->createMock(SecurityServiceInterface::class);
+        $securityService
             ->expects($this->once())
             ->method('getIdentity')
             ->willReturn($identity);
@@ -163,9 +163,9 @@ class HateoasMiddlewareTest extends TestCase
          * @var RequestInterface $request
          * @var MiddlewareChainInterface $chain
          * @var ResponseInterface $response
-         * @var StorageInterface $storage
+         * @var SecurityServiceInterface $securityService
          */
-        $middleware = new HateoasMiddleware($authorizer, $expander, $serializer, $storage);
+        $middleware = new HateoasMiddleware($authorizer, $expander, $serializer, $securityService);
 
         $this->assertSame($response, $middleware->process($request, $chain));
     }
@@ -202,8 +202,8 @@ class HateoasMiddlewareTest extends TestCase
 
         $identity = $this->createMock(IdentityInterface::class);
 
-        $storage = $this->createMock(StorageInterface::class);
-        $storage
+        $securityService = $this->createMock(SecurityServiceInterface::class);
+        $securityService
             ->expects($this->once())
             ->method('getIdentity')
             ->willReturn($identity);
@@ -286,9 +286,9 @@ class HateoasMiddlewareTest extends TestCase
          * @var SerializerInterface $serializer
          * @var RequestInterface $request
          * @var MiddlewareChainInterface $chain
-         * @var StorageInterface $storage
+         * @var SecurityServiceInterface $securityService
          */
-        $middleware = new HateoasMiddleware($authorizer, $expander, $serializer, $storage);
+        $middleware = new HateoasMiddleware($authorizer, $expander, $serializer, $securityService);
 
         $response = $middleware->process($request, $chain);
         $this->assertInstanceOf(LinkNotFoundProblemDetails::class, $response->getBody());
@@ -326,8 +326,8 @@ class HateoasMiddlewareTest extends TestCase
 
         $identity = $this->createMock(IdentityInterface::class);
 
-        $storage = $this->createMock(StorageInterface::class);
-        $storage
+        $securityService = $this->createMock(SecurityServiceInterface::class);
+        $securityService
             ->expects($this->once())
             ->method('getIdentity')
             ->willReturn($identity);
@@ -410,9 +410,9 @@ class HateoasMiddlewareTest extends TestCase
          * @var SerializerInterface $serializer
          * @var RequestInterface $request
          * @var MiddlewareChainInterface $chain
-         * @var StorageInterface $storage
+         * @var SecurityServiceInterface $securityService
          */
-        $middleware = new HateoasMiddleware($authorizer, $expander, $serializer, $storage);
+        $middleware = new HateoasMiddleware($authorizer, $expander, $serializer, $securityService);
 
         $response = $middleware->process($request, $chain);
         $this->assertInstanceOf(LinkNotEmbeddableProblemDetails::class, $response->getBody());
@@ -450,8 +450,8 @@ class HateoasMiddlewareTest extends TestCase
 
         $identity = $this->createMock(IdentityInterface::class);
 
-        $storage = $this->createMock(StorageInterface::class);
-        $storage
+        $securityService = $this->createMock(SecurityServiceInterface::class);
+        $securityService
             ->expects($this->once())
             ->method('getIdentity')
             ->willReturn($identity);
@@ -534,9 +534,9 @@ class HateoasMiddlewareTest extends TestCase
          * @var SerializerInterface $serializer
          * @var RequestInterface $request
          * @var MiddlewareChainInterface $chain
-         * @var StorageInterface $storage
+         * @var SecurityServiceInterface $securityService
          */
-        $middleware = new HateoasMiddleware($authorizer, $expander, $serializer, $storage);
+        $middleware = new HateoasMiddleware($authorizer, $expander, $serializer, $securityService);
 
         $response = $middleware->process($request, $chain);
         $this->assertInstanceOf(AttributeNotFoundProblemDetails::class, $response->getBody());

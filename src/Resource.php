@@ -13,21 +13,21 @@ class Resource implements ResourceInterface
      *
      * @var LinkInterface[]
      */
-    private $links = [];
+    private $links;
 
     /**
      * Attributes.
      *
      * @var AttributeInterface[]
      */
-    private $attributes = [];
+    private $attributes;
 
     /**
      * Embedded resources.
      *
      * @var ResourceInterface[]
      */
-    private $resources = [];
+    private $resources;
 
     /**
      * Resource constructor.

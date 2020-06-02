@@ -18,7 +18,7 @@ use ExtendsFramework\Http\Middleware\MiddlewareInterface;
 use ExtendsFramework\Http\Request\RequestInterface;
 use ExtendsFramework\Http\Response\Response;
 use ExtendsFramework\Http\Response\ResponseInterface;
-use ExtendsFramework\Identity\Storage\StorageInterface;
+use ExtendsFramework\Security\SecurityServiceInterface;
 
 class HateoasMiddleware implements MiddlewareInterface
 {
@@ -44,11 +44,9 @@ class HateoasMiddleware implements MiddlewareInterface
     private $serializer;
 
     /**
-     * Identity storage.
-     *
-     * @var StorageInterface
+     * @var SecurityServiceInterface
      */
-    private $storage;
+    private $securityService;
 
     /**
      * HateoasMiddleware constructor.
@@ -56,18 +54,18 @@ class HateoasMiddleware implements MiddlewareInterface
      * @param AuthorizerInterface $authorizer
      * @param ExpanderInterface $expander
      * @param SerializerInterface $serializer
-     * @param StorageInterface $storage
+     * @param SecurityServiceInterface $securityService
      */
     public function __construct(
         AuthorizerInterface $authorizer,
         ExpanderInterface $expander,
         SerializerInterface $serializer,
-        StorageInterface $storage
+        SecurityServiceInterface $securityService
     ) {
         $this->authorizer = $authorizer;
         $this->expander = $expander;
         $this->serializer = $serializer;
-        $this->storage = $storage;
+        $this->securityService = $securityService;
     }
 
     /**
@@ -96,7 +94,7 @@ class HateoasMiddleware implements MiddlewareInterface
                         $builder
                             ->setExpander($this->expander)
                             ->setAuthorizer($this->authorizer)
-                            ->setIdentity($this->storage->getIdentity())
+                            ->setIdentity($this->securityService->getIdentity())
                             ->setToExpand($expand)
                             ->setToProject($project)
                             ->build()
