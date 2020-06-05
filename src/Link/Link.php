@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace ExtendsFramework\Hateoas\Link;
 
 use ExtendsFramework\Authorization\Permission\PermissionInterface;
+use ExtendsFramework\Authorization\Policy\PolicyInterface;
+use ExtendsFramework\Authorization\Role\RoleInterface;
 use ExtendsFramework\Http\Request\RequestInterface;
 
 class Link implements LinkInterface
@@ -23,27 +25,47 @@ class Link implements LinkInterface
     private $embeddable;
 
     /**
+     * Role.
+     *
+     * @var RoleInterface
+     */
+    private $role;
+
+    /**
      * Permission.
      *
      * @var PermissionInterface|null
      */
-    protected $permission;
+    private $permission;
+
+    /**
+     * Policy.
+     *
+     * @var PolicyInterface
+     */
+    private $policy;
 
     /**
      * Link constructor.
      *
      * @param RequestInterface $request
      * @param bool|null $embeddable
+     * @param RoleInterface|null $role
      * @param PermissionInterface|null $permission
+     * @param PolicyInterface|null $policy
      */
     public function __construct(
         RequestInterface $request,
         bool $embeddable = null,
-        PermissionInterface $permission = null
+        RoleInterface $role = null,
+        PermissionInterface $permission = null,
+        PolicyInterface $policy = null
     ) {
         $this->request = $request;
         $this->embeddable = $embeddable ?? false;
+        $this->role = $role;
         $this->permission = $permission;
+        $this->policy = $policy;
     }
 
     /**
@@ -65,8 +87,24 @@ class Link implements LinkInterface
     /**
      * @inheritDoc
      */
+    public function getRole(): ?RoleInterface
+    {
+        return $this->role;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getPermission(): ?PermissionInterface
     {
         return $this->permission;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPolicy(): ?PolicyInterface
+    {
+        return $this->policy;
     }
 }

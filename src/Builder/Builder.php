@@ -5,6 +5,8 @@ namespace ExtendsFramework\Hateoas\Builder;
 
 use ExtendsFramework\Authorization\AuthorizerInterface;
 use ExtendsFramework\Authorization\Permission\PermissionInterface;
+use ExtendsFramework\Authorization\Policy\PolicyInterface;
+use ExtendsFramework\Authorization\Role\RoleInterface;
 use ExtendsFramework\Hateoas\Attribute\AttributeInterface;
 use ExtendsFramework\Hateoas\Builder\Exception\AttributeNotFound;
 use ExtendsFramework\Hateoas\Builder\Exception\LinkNotEmbeddable;
@@ -171,12 +173,12 @@ class Builder implements BuilderInterface
      */
     public function build(): ResourceInterface
     {
-        $links = $this->getPermittedLinks($this->links);
+        $links = $this->getAuthorizedLinks($this->links);
 
         $resource = new Resource(
             $links,
             $this->getProjectedAttributes(
-                $this->getPermittedAttributes($this->attributes),
+                $this->getAuthorizedAttributes($this->attributes),
                 array_filter($this->toProject, 'is_string')
             ),
             $this->getBuiltResources(
@@ -199,14 +201,14 @@ class Builder implements BuilderInterface
      *
      * @return LinkInterface[]|LinkInterface[][]
      */
-    private function getPermittedLinks(array $links): array
+    private function getAuthorizedLinks(array $links): array
     {
         $authorized = [];
         foreach ($links as $rel => $link) {
             if (is_array($link)) {
-                $authorized[$rel] = $this->getPermittedLinks($link);
+                $authorized[$rel] = $this->getAuthorizedLinks($link);
             } else {
-                if ($this->isPermitted($link->getPermission())) {
+                if ($this->isAuthorized($link->getRole(), $link->getPermission(), $link->getPolicy())) {
                     $authorized[$rel] = $link;
                 }
             }
@@ -216,16 +218,34 @@ class Builder implements BuilderInterface
     }
 
     /**
-     * Check if permission is permitted.
+     * Check if authorized.
      *
+     * @param RoleInterface|null $role
      * @param PermissionInterface|null $permission
+     * @param PolicyInterface|null $policy
      *
      * @return bool
      */
-    private function isPermitted(PermissionInterface $permission = null): bool
-    {
-        return !$permission ||
-            ($this->authorizer && $this->identity && $this->authorizer->isPermitted($this->identity, $permission));
+    private function isAuthorized(
+        RoleInterface $role = null,
+        PermissionInterface $permission = null,
+        PolicyInterface $policy = null
+    ): bool {
+        $authorized = true;
+        if ($role || $permission || $policy) {
+            $authorized = false;
+
+            if ($this->authorizer && $this->identity) {
+                if (($role && $this->authorizer->hasRole($this->identity, $role)) ||
+                    ($permission && $this->authorizer->isPermitted($this->identity, $permission)) ||
+                    ($policy && $this->authorizer->isAllowed($this->identity, $policy))
+                ) {
+                    $authorized = true;
+                }
+            }
+        }
+
+        return $authorized;
     }
 
     /**
@@ -258,11 +278,11 @@ class Builder implements BuilderInterface
      *
      * @return AttributeInterface[]
      */
-    private function getPermittedAttributes(array $attributes): array
+    private function getAuthorizedAttributes(array $attributes): array
     {
         $authorized = [];
         foreach ($attributes as $property => $attribute) {
-            if ($this->isPermitted($attribute->getPermission())) {
+            if ($this->isAuthorized($attribute->getRole(), $attribute->getPermission(), $attribute->getPolicy())) {
                 $authorized[$property] = $attribute;
             }
         }

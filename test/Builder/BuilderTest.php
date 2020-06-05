@@ -29,12 +29,12 @@ class BuilderTest extends TestCase
      * @covers \ExtendsFramework\Hateoas\Builder\Builder::setToProject()
      * @covers \ExtendsFramework\Hateoas\Builder\Builder::setToExpand()
      * @covers \ExtendsFramework\Hateoas\Builder\Builder::build()
-     * @covers \ExtendsFramework\Hateoas\Builder\Builder::getPermittedLinks()
+     * @covers \ExtendsFramework\Hateoas\Builder\Builder::getAuthorizedLinks()
      * @covers \ExtendsFramework\Hateoas\Builder\Builder::getProjectedAttributes()
-     * @covers \ExtendsFramework\Hateoas\Builder\Builder::getPermittedAttributes()
+     * @covers \ExtendsFramework\Hateoas\Builder\Builder::getAuthorizedAttributes()
      * @covers \ExtendsFramework\Hateoas\Builder\Builder::getBuiltResources()
      * @covers \ExtendsFramework\Hateoas\Builder\Builder::getExpandedResources()
-     * @covers \ExtendsFramework\Hateoas\Builder\Builder::isPermitted()
+     * @covers \ExtendsFramework\Hateoas\Builder\Builder::isAuthorized()
      * @covers \ExtendsFramework\Hateoas\Builder\Builder::reset()
      */
     public function testBuild(): void
@@ -137,10 +137,10 @@ class BuilderTest extends TestCase
      * @covers \ExtendsFramework\Hateoas\Builder\Builder::addAttribute()
      * @covers \ExtendsFramework\Hateoas\Builder\Builder::setToProject()
      * @covers \ExtendsFramework\Hateoas\Builder\Builder::build()
-     * @covers \ExtendsFramework\Hateoas\Builder\Builder::getPermittedLinks()
-     * @covers \ExtendsFramework\Hateoas\Builder\Builder::getPermittedAttributes()
+     * @covers \ExtendsFramework\Hateoas\Builder\Builder::getAuthorizedLinks()
+     * @covers \ExtendsFramework\Hateoas\Builder\Builder::getAuthorizedAttributes()
      * @covers \ExtendsFramework\Hateoas\Builder\Builder::getProjectedAttributes()
-     * @covers \ExtendsFramework\Hateoas\Builder\Builder::isPermitted()
+     * @covers \ExtendsFramework\Hateoas\Builder\Builder::isAuthorized()
      */
     public function testAttributeNotFound()
     {
@@ -175,11 +175,11 @@ class BuilderTest extends TestCase
      * @covers \ExtendsFramework\Hateoas\Builder\Builder::addAttribute()
      * @covers \ExtendsFramework\Hateoas\Builder\Builder::setToProject()
      * @covers \ExtendsFramework\Hateoas\Builder\Builder::build()
-     * @covers \ExtendsFramework\Hateoas\Builder\Builder::getPermittedLinks()
-     * @covers \ExtendsFramework\Hateoas\Builder\Builder::getPermittedAttributes()
+     * @covers \ExtendsFramework\Hateoas\Builder\Builder::getAuthorizedLinks()
+     * @covers \ExtendsFramework\Hateoas\Builder\Builder::getAuthorizedAttributes()
      * @covers \ExtendsFramework\Hateoas\Builder\Builder::getProjectedAttributes()
      * @covers \ExtendsFramework\Hateoas\Builder\Builder::getExpandedResources()
-     * @covers \ExtendsFramework\Hateoas\Builder\Builder::isPermitted()
+     * @covers \ExtendsFramework\Hateoas\Builder\Builder::isAuthorized()
      */
     public function testLinkNotFound()
     {
@@ -214,11 +214,11 @@ class BuilderTest extends TestCase
      * @covers \ExtendsFramework\Hateoas\Builder\Builder::addAttribute()
      * @covers \ExtendsFramework\Hateoas\Builder\Builder::setToProject()
      * @covers \ExtendsFramework\Hateoas\Builder\Builder::build()
-     * @covers \ExtendsFramework\Hateoas\Builder\Builder::getPermittedLinks()
-     * @covers \ExtendsFramework\Hateoas\Builder\Builder::getPermittedAttributes()
+     * @covers \ExtendsFramework\Hateoas\Builder\Builder::getAuthorizedLinks()
+     * @covers \ExtendsFramework\Hateoas\Builder\Builder::getAuthorizedAttributes()
      * @covers \ExtendsFramework\Hateoas\Builder\Builder::getProjectedAttributes()
      * @covers \ExtendsFramework\Hateoas\Builder\Builder::getExpandedResources()
-     * @covers \ExtendsFramework\Hateoas\Builder\Builder::isPermitted()
+     * @covers \ExtendsFramework\Hateoas\Builder\Builder::isAuthorized()
      */
     public function testLinkNotEmbeddable()
     {
